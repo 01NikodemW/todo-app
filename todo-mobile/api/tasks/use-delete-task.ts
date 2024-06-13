@@ -2,9 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../axios-instance";
 import { queryClient } from "../query-client";
 import { queryKeys } from "../query-keys";
+import { router } from "expo-router";
 
-export async function deleteTask(id: number) {
-  let url = `/${queryKeys.tasks}/${id}`;
+export async function deleteTask(id: string | undefined) {
+  const url = `/${queryKeys.tasks}/${id}`;
 
   const response = await axiosInstance.delete(url, {
     headers: {
@@ -17,9 +18,10 @@ export async function deleteTask(id: number) {
 
 export function useDeleteTask() {
   const { mutate } = useMutation({
-    mutationFn: (id: number) => deleteTask(id),
+    mutationFn: (id: string | undefined) => deleteTask(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
+      router.navigate("/");
     },
   });
 

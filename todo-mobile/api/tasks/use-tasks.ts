@@ -4,7 +4,7 @@ import { axiosInstance } from "@/api/axios-instance";
 import { Task } from "@/types/task";
 
 export async function getTasks(): Promise<Task[]> {
-  let url = `/${queryKeys.tasks}`;
+  const url = `/${queryKeys.tasks}`;
 
   const response = await axiosInstance.get(url, {
     headers: {

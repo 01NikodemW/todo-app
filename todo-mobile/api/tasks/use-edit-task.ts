@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { queryKeys } from "../query-keys";
 import { queryClient } from "../query-client";
-import { CreateTaskRequest } from "@/types/api/tasks/create-task-request";
 import { axiosInstance } from "../axios-instance";
-import { router } from "expo-router";
+import { EditTaskRequest } from "@/types/api/tasks/edit-task-request";
 
-export async function createTask(data: CreateTaskRequest) {
-  const url = `/${queryKeys.tasks}`;
-  const response = await axiosInstance.post(url, data, {
+export async function editTask(id: string | undefined, data: EditTaskRequest) {
+  console.log("editTask", id);
+  const url = `/${queryKeys.tasks}/${id}`;
+  const response = await axiosInstance.put(url, data, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -16,12 +16,11 @@ export async function createTask(data: CreateTaskRequest) {
   return response.data;
 }
 
-export function useCreateTask() {
+export function useEditTask(id: string | undefined) {
   const { mutate } = useMutation({
-    mutationFn: (data: CreateTaskRequest) => createTask(data),
+    mutationFn: (data: EditTaskRequest) => editTask(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
-      router.back();
     },
   });
 

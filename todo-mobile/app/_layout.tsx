@@ -4,7 +4,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, router } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -14,6 +14,7 @@ import { queryClient } from "@/api/query-client";
 import { Pressable, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { moderateScale } from "@/styles/metrics";
+import { useDeleteTask } from "@/api/tasks/use-delete-task";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -48,7 +49,7 @@ export default function RootLayout() {
                     router.navigate("create-task");
                   }}
                 >
-                  <Text>Create new task</Text>
+                  <Ionicons name="add" size={moderateScale(30)} color="black" />
                 </Pressable>
               ),
             }}
@@ -68,7 +69,7 @@ export default function RootLayout() {
               headerRight: () => (
                 <Pressable
                   onPress={() => {
-                    router.navigate("create-task");
+                    router.back();
                   }}
                 >
                   <Ionicons

@@ -4,7 +4,7 @@ import { axiosInstance } from "@/api/axios-instance";
 import { Task } from "@/types/task";
 
 export async function getTaskById(id: string | undefined): Promise<Task> {
-  let url = `/${queryKeys.tasks}/${id}`;
+  const url = `/${queryKeys.tasks}/${id}`;
 
   const response = await axiosInstance.get(url, {
     headers: {
