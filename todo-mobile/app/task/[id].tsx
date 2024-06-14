@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     padding: verticalScale(10),
   },
   descriptionInput: {
-    height: verticalScale(100),
+    height: verticalScale(200),
     margin: verticalScale(12),
     borderWidth: 1,
     padding: verticalScale(10),
