@@ -30,6 +30,12 @@ export function useCreateTask() {
       });
     },
     onError: (error: any) => {
+      if (!error.response)
+        return Toast.show({
+          type: "custom",
+          text1: "Error",
+          text2: "Failed to create task",
+        });
       queryErrorHandler(error.response.data);
     },
   });

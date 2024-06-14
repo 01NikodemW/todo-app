@@ -29,6 +29,13 @@ export function useDeleteTask() {
         text2: "Task deleted",
       });
     },
+    onError: () => {
+      Toast.show({
+        type: "custom",
+        text1: "Error",
+        text2: "Failed to delete task",
+      });
+    },
   });
 
   return mutate;

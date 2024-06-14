@@ -2,8 +2,6 @@ import { QueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 
 export function queryErrorHandler(error: any): void {
-  console.log("error", error);
-
   const errorMessage = error.message.join(", ");
 
   Toast.show({

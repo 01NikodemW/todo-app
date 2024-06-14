@@ -16,19 +16,26 @@ export async function editTask(id: string | undefined, data: EditTaskRequest) {
   return response.data;
 }
 
-export function useEditTask(id: string | undefined) {
+export function useEditTask(id: string | undefined, onSuccess: () => void) {
   const { mutate } = useMutation({
     mutationFn: (data: EditTaskRequest) => editTask(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
+      onSuccess();
       Toast.show({
         type: "custom",
         text1: "Success",
         text2: "Task updated",
       });
     },
-    onError: (error) => {
-      queryErrorHandler(error);
+    onError: (error: any) => {
+      if (!error.response)
+        return Toast.show({
+          type: "custom",
+          text1: "Error",
+          text2: "Failed to edit task",
+        });
+      queryErrorHandler(error.response.data);
     },
   });
 

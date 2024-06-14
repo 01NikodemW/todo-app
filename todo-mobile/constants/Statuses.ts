@@ -1,4 +1,4 @@
-import { TaskStatusType } from "./task";
+import { TaskStatusType } from "../types/task";
 
 export const TASK_STATUS: { [key: string]: TaskStatusType } = {
   TODO: "todo",

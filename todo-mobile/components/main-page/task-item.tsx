@@ -59,7 +59,9 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
   return (
     <GestureHandlerRootView>
       <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={[animatedStyle, { marginBottom: 24 }]}>
+        <Animated.View
+          style={[animatedStyle, { marginBottom: horizontalScale(24) }]}
+        >
           <Pressable onPress={handlePress}>
             <View style={styles.itemContainer}>
               <Text style={styles.title}>{task.title}</Text>

@@ -2,8 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 import { queryKeys } from "../query-keys";
 import { queryClient, queryErrorHandler } from "../query-client";
 import { axiosInstance } from "../axios-instance";
-import { TASK_STATUS } from "@/types/constants";
+
 import Toast from "react-native-toast-message";
+import { TASK_STATUS } from "@/constants/Statuses";
 
 export async function markAsComplete(id: number) {
   const url = `/${queryKeys.tasks}/${id}`;

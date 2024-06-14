@@ -14,6 +14,8 @@ import { Task } from "@/types/task";
 export default function HomeScreen() {
   const { tasks } = useTasks();
 
+
+
   const renderItem = ({ item }: { item: Task }) => {
     return <TaskItem key={item.id} task={item} />;
   };

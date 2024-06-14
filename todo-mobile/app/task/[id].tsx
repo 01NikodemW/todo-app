@@ -1,19 +1,25 @@
 import { Formik } from "formik";
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { moderateScale, verticalScale } from "@/styles/metrics";
-import { TASK_STATUS, TASK_STATUS_ARRAY } from "@/types/constants";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "@/styles/metrics";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useTaskById } from "@/api/tasks/use-task-by-id";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useEditTask } from "@/api/tasks/use-edit-task";
 import { EditTaskRequest } from "@/types/api/tasks/edit-task-request";
 import { useDeleteTask } from "@/api/tasks/use-delete-task";
+import { TASK_STATUS, TASK_STATUS_ARRAY } from "@/constants/Statuses";
 
 export default function Task() {
   const { id } = useLocalSearchParams();
   const { task, isTaskFetching } = useTaskById(Array.isArray(id) ? id[0] : id);
-  const editTask = useEditTask(Array.isArray(id) ? id[0] : id);
+  const editTask = useEditTask(Array.isArray(id) ? id[0] : id, () =>
+    setIsEditing(false)
+  );
   const deleteTask = useDeleteTask();
   const navigation = useNavigation();
 
@@ -44,6 +50,17 @@ export default function Task() {
     }
   };
 
+  const formatDate = (date: string | undefined) => {
+    if (!date) {
+      return "";
+    }
+    const dateObj = new Date(date);
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -69,11 +86,11 @@ export default function Task() {
         enableReinitialize={true}
         onSubmit={(values) => {
           editTask(values);
-          setIsEditing(false);
         }}
       >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
+            <Text style={styles.dateText}>{formatDate(task?.createdAt)}</Text>
             <TextInput
               style={styles.titleInput}
               onChangeText={handleChange("title")}
@@ -154,43 +171,55 @@ export default function Task() {
 }
 
 const styles = StyleSheet.create({
+  dateText: {
+    marginTop: verticalScale(12),
+    marginRight: horizontalScale(12),
+    fontSize: moderateScale(14),
+    fontWeight: "bold",
+    alignSelf: "flex-end",
+  },
   titleInput: {
-    height: 40,
-    margin: 12,
+    height: verticalScale(40),
+    margin: verticalScale(12),
     borderWidth: 1,
-    padding: 10,
+    padding: verticalScale(10),
   },
   descriptionInput: {
-    height: 200,
-    margin: 12,
+    height: verticalScale(100),
+    margin: verticalScale(12),
     borderWidth: 1,
-    padding: 10,
+    padding: verticalScale(10),
   },
   statusContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    margin: 12,
+    margin: verticalScale(12),
   },
   editButton: {
     backgroundColor: "#8d49e8",
-    padding: 10,
-    margin: 12,
+    padding: verticalScale(10),
+    marginHorizontal: horizontalScale(12),
+    marginVertical: verticalScale(20),
     alignItems: "center",
+    borderRadius: moderateScale(8),
   },
   editText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: moderateScale(14),
   },
   cancelButton: {
     borderColor: "#8d49e8",
     borderWidth: 2,
-    padding: 10,
-    margin: 12,
+    padding: verticalScale(10),
+    marginHorizontal: horizontalScale(12),
     alignItems: "center",
+    borderRadius: moderateScale(8),
   },
   cancelText: {
     color: "#8d49e8",
     fontWeight: "bold",
+    fontSize: moderateScale(14),
   },
   statusPressable: {
     alignItems: "center",
