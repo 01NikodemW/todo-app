@@ -9,13 +9,13 @@ import { router } from "expo-router";
 import React, { FC } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import {
-  PanGestureHandler,
   GestureHandlerRootView,
+  Gesture,
+  GestureDetector,
 } from "react-native-gesture-handler";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  useAnimatedGestureHandler,
   withSpring,
   runOnJS,
 } from "react-native-reanimated";
@@ -29,22 +29,21 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
   const MAX_TRANSLATE_X = -80;
   const markTaskAsComplete = useMarkTaskAsComplete();
 
-  const onGestureEvent = useAnimatedGestureHandler({
-    onActive: (event) => {
+  const taskItemGesture = Gesture.Pan()
+    .onUpdate((event) => {
       if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
         translateX.value = Math.max(
           MAX_TRANSLATE_X,
           Math.min(0, event.translationX)
         );
       }
-    },
-    onEnd: (event) => {
-      if (translateX.value < MAX_TRANSLATE_X / 2) {
+    })
+    .onEnd((event) => {
+      if (translateX.value < MAX_TRANSLATE_X / 3) {
         runOnJS(markTaskAsComplete)(task.id);
       }
-      translateX.value = withSpring(0); // Reset position on end
-    },
-  });
+      translateX.value = withSpring(0);
+    });
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -58,7 +57,8 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
 
   return (
     <GestureHandlerRootView>
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
+      {/* <PanGestureHandler onGestureEvent={onGestureEvent}> */}
+      <GestureDetector gesture={taskItemGesture}>
         <Animated.View
           style={[animatedStyle, { marginBottom: horizontalScale(24) }]}
         >
@@ -68,7 +68,8 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
             </View>
           </Pressable>
         </Animated.View>
-      </PanGestureHandler>
+      </GestureDetector>
+      {/* </PanGestureHandler> */}
     </GestureHandlerRootView>
   );
 };

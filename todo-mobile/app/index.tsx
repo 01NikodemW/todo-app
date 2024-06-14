@@ -65,6 +65,6 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: moderateScale(16),
-    paddingBottom: verticalScale(100), // Add some padding to the bottom to ensure scrolling past the last item
+    paddingBottom: verticalScale(100),
   },
 });
