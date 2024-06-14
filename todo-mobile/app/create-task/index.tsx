@@ -4,24 +4,24 @@ import { Formik } from "formik";
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { moderateScale, verticalScale } from "@/styles/metrics";
-import { TASK_STATUS_ARRAY } from "@/types/constants";
+import { TASK_STATUS, TASK_STATUS_ARRAY } from "@/types/constants";
 
 export default function CreateTask() {
   const initialValues: CreateTaskRequest = {
     title: "",
     description: "",
-    status: "todo",
+    status: TASK_STATUS.TODO,
   };
 
   const createTask = useCreateTask();
 
   const generateIcon = (status: string) => {
     switch (status) {
-      case "todo":
+      case TASK_STATUS.TODO:
         return "create-outline";
-      case "in-progress":
+      case TASK_STATUS.IN_PROGRESS:
         return "time-outline";
-      case "done":
+      case TASK_STATUS.DONE:
         return "checkmark-done";
     }
   };

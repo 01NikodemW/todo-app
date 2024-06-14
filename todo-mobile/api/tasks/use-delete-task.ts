@@ -3,6 +3,7 @@ import { axiosInstance } from "../axios-instance";
 import { queryClient } from "../query-client";
 import { queryKeys } from "../query-keys";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 export async function deleteTask(id: string | undefined) {
   const url = `/${queryKeys.tasks}/${id}`;
@@ -22,6 +23,11 @@ export function useDeleteTask() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
       router.navigate("/");
+      Toast.show({
+        type: "custom",
+        text1: "Success",
+        text2: "Task deleted",
+      });
     },
   });
 

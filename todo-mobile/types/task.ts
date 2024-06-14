@@ -2,6 +2,8 @@ export type Task = {
   id: number;
   title: string;
   description: string;
-  status: "todo" | "done" | "in-progress";
+  status: TaskStatusType;
   createdAt: string;
 };
+
+export type TaskStatusType = "todo" | "done" | "in-progress";

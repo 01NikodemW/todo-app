@@ -3,6 +3,7 @@ import { queryKeys } from "../query-keys";
 import { queryClient, queryErrorHandler } from "../query-client";
 import { axiosInstance } from "../axios-instance";
 import { TASK_STATUS } from "@/types/constants";
+import Toast from "react-native-toast-message";
 
 export async function markAsComplete(id: number) {
   const url = `/${queryKeys.tasks}/${id}`;
@@ -26,6 +27,11 @@ export function useMarkTaskAsComplete() {
     mutationFn: (id: number) => markAsComplete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
+      Toast.show({
+        type: "custom",
+        text1: "Success",
+        text2: "Task marked as complete",
+      });
     },
     onError: (error) => {
       queryErrorHandler(error);

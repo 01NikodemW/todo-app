@@ -3,6 +3,7 @@ import { queryKeys } from "../query-keys";
 import { queryClient, queryErrorHandler } from "../query-client";
 import { axiosInstance } from "../axios-instance";
 import { EditTaskRequest } from "@/types/api/tasks/edit-task-request";
+import Toast from "react-native-toast-message";
 
 export async function editTask(id: string | undefined, data: EditTaskRequest) {
   const url = `/${queryKeys.tasks}/${id}`;
@@ -20,6 +21,11 @@ export function useEditTask(id: string | undefined) {
     mutationFn: (data: EditTaskRequest) => editTask(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
+      Toast.show({
+        type: "custom",
+        text1: "Success",
+        text2: "Task updated",
+      });
     },
     onError: (error) => {
       queryErrorHandler(error);

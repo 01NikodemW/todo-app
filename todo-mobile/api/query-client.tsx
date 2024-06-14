@@ -2,10 +2,16 @@ import { QueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 
 export function queryErrorHandler(error: any): void {
+  console.log("error", error);
+
+  const errorMessage = error.message.join(", ");
+
   Toast.show({
-    type: "error",
+    type: "custom",
     text1: "Error",
-    text2: error.response.data.message[0],
+    text2: errorMessage,
+    position: "top",
+    visibilityTime: 6000,
   });
 }
 

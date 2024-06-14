@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { moderateScale, verticalScale } from "@/styles/metrics";
-import { TASK_STATUS_ARRAY } from "@/types/constants";
+import { TASK_STATUS, TASK_STATUS_ARRAY } from "@/types/constants";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useTaskById } from "@/api/tasks/use-task-by-id";
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -22,24 +22,24 @@ export default function Task() {
   const [initialValues, setInitialValues] = useState<EditTaskRequest>({
     title: task?.title || "",
     description: task?.description || "",
-    status: task?.status || "todo",
+    status: task?.status || TASK_STATUS.TODO,
   });
 
   useEffect(() => {
     setInitialValues({
       title: task?.title || "",
       description: task?.description || "",
-      status: task?.status || "todo",
+      status: task?.status || TASK_STATUS.TODO,
     });
   }, [task, isTaskFetching]);
 
   const generateIcon = (status: string) => {
     switch (status) {
-      case "todo":
+      case TASK_STATUS.TODO:
         return "create-outline";
-      case "in-progress":
+      case TASK_STATUS.IN_PROGRESS:
         return "time-outline";
-      case "done":
+      case TASK_STATUS.DONE:
         return "checkmark-done";
     }
   };
@@ -139,7 +139,7 @@ export default function Task() {
                   setIsEditing(false);
                   handleChange("title")(task?.title || "");
                   handleChange("description")(task?.description || "");
-                  handleChange("status")(task?.status || "todo");
+                  handleChange("status")(task?.status || TASK_STATUS.TODO);
                 }}
                 style={styles.cancelButton}
               >

@@ -8,7 +8,10 @@ import { Task } from "@/types/task";
 import { router } from "expo-router";
 import React, { FC } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -28,13 +31,17 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
 
   const onGestureEvent = useAnimatedGestureHandler({
     onActive: (event) => {
-      translateX.value = Math.max(
-        MAX_TRANSLATE_X,
-        Math.min(0, event.translationX)
-      );
+      if (Math.abs(event.translationX) > Math.abs(event.translationY)) {
+        translateX.value = Math.max(
+          MAX_TRANSLATE_X,
+          Math.min(0, event.translationX)
+        );
+      }
     },
     onEnd: (event) => {
-      runOnJS(markTaskAsComplete)(task.id);
+      if (translateX.value < MAX_TRANSLATE_X / 2) {
+        runOnJS(markTaskAsComplete)(task.id);
+      }
       translateX.value = withSpring(0); // Reset position on end
     },
   });
@@ -44,20 +51,23 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
       transform: [{ translateX: translateX.value }],
     };
   });
+
   const handlePress = () => {
     router.navigate(`/task/${task.id}`);
   };
 
   return (
-    <PanGestureHandler onGestureEvent={onGestureEvent}>
-      <Animated.View style={[animatedStyle]}>
-        <Pressable onPress={handlePress}>
-          <View style={styles.itemContainer}>
-            <Text style={styles.title}>{task.title}</Text>
-          </View>
-        </Pressable>
-      </Animated.View>
-    </PanGestureHandler>
+    <GestureHandlerRootView>
+      <PanGestureHandler onGestureEvent={onGestureEvent}>
+        <Animated.View style={[animatedStyle, { marginBottom: 24 }]}>
+          <Pressable onPress={handlePress}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.title}>{task.title}</Text>
+            </View>
+          </Pressable>
+        </Animated.View>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
   );
 };
 
@@ -66,7 +76,6 @@ const styles = StyleSheet.create({
     width: horizontalScale(300),
     height: verticalScale(60),
     backgroundColor: "white",
-    marginTop: verticalScale(8),
     borderRadius: moderateScale(8),
     alignItems: "center",
     justifyContent: "center",

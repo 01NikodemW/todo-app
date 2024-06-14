@@ -15,6 +15,7 @@ import { queryClient } from "@/api/query-client";
 import { moderateScale, verticalScale } from "@/styles/metrics";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-toast-message";
+import CustomToast from "@/components/custom-toast";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -71,27 +72,15 @@ export default function RootLayout() {
             <Stack.Screen
               name="create-task/index"
               options={{
-                presentation: "modal",
-                headerTitle: "Create new task",
-                headerRight: () => (
-                  <Pressable
-                    onPress={() => {
-                      router.back();
-                    }}
-                  >
-                    <Ionicons
-                      name="close"
-                      size={verticalScale(30)}
-                      color="black"
-                    />
-                  </Pressable>
-                ),
+                headerTitle: "",
+                headerBackTitle: "Back to tasks",
               }}
             />
             <Stack.Screen name="+not-found" />
           </Stack>
         </ThemeProvider>
-        <Toast />
+        {/* <Toast /> */}
+        <Toast config={{ custom: (props) => <CustomToast {...props} /> }} />
       </RootSiblingParent>
     </QueryClientProvider>
   );

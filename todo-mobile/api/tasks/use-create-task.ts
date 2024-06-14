@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { queryKeys } from "../query-keys";
-import { queryClient } from "../query-client";
+import { queryClient, queryErrorHandler } from "../query-client";
 import { CreateTaskRequest } from "@/types/api/tasks/create-task-request";
 import { axiosInstance } from "../axios-instance";
 import { router } from "expo-router";
@@ -23,13 +23,14 @@ export function useCreateTask() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
       router.back();
-    },
-    onError: (error) => {
       Toast.show({
-        type: "error",
-        text1: "Hello",
-        text2: "This is some text",
+        type: "custom",
+        text1: "Success",
+        text2: "Task creted",
       });
+    },
+    onError: (error: any) => {
+      queryErrorHandler(error.response.data);
     },
   });
 
