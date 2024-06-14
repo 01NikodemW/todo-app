@@ -50,14 +50,12 @@
     npm start
     ```
 
+# Działanie aplikacji
 
-
-2. Działanie aplikacji 
-
-Do projektu zamieszczam nagranie prezentujące działanie wszystkich wymaganych funkcjonalności z poziomu aplikacji mobilnej 
+Do projektu zamieszczam nagranie prezentujące działanie wszystkich wymaganych funkcjonalności z poziomu aplikacji mobilnej
 [Demo video](demo.mp4)
 
-2. Proces tworzenia
+# Proces tworzenia
 
 Moją pracę rozpocząłem od stworzenia backendu. Utworzyłem bazowy projekt w Nest.js. Następnej przeszedłem do stworzenia bazy danych, w tym celu za pomocą Prisma utworzyłem klasę Task określającą pola jakie ma zawierać dany task. W kolejnym kroku przeszedłem to tworzenia wymaganych routingow. Utworzyłem w projekcie katalog tasks, gdzie znajduje sie kontroler, serwis oraz walidacja wykonywanych zapytań. Zadbałem o sprawdzenie czy zasób do którego chcemy sie odwołać po ID istnieje oraz czy podczas tworzenia zasobu zostały podane wszystkie wymagane parametry. W przypadku gdy któreś z wymagań nie zostało spełnione z backendu zostanie wysłana odpowiednia zwrotka zawierająca informacje o błędzie w celu prezentacji jej użytkownikowi.
 Na koniec wykorzystując swggera stworzyłem dokumentacje mojego api aby ułatwić pracę osobą z niego korzystającym.
