@@ -2,22 +2,28 @@ import { useMutation } from "@tanstack/react-query";
 import { queryKeys } from "../query-keys";
 import { queryClient, queryErrorHandler } from "../query-client";
 import { axiosInstance } from "../axios-instance";
-import { EditTaskRequest } from "@/types/api/tasks/edit-task-request";
+import { TASK_STATUS } from "@/types/constants";
 
-export async function editTask(id: string | undefined, data: EditTaskRequest) {
+export async function markAsComplete(id: number) {
   const url = `/${queryKeys.tasks}/${id}`;
-  const response = await axiosInstance.put(url, data, {
-    headers: {
-      "Content-Type": "application/json",
+  const response = await axiosInstance.put(
+    url,
+    {
+      status: TASK_STATUS.DONE,
     },
-  });
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   return response.data;
 }
 
-export function useEditTask(id: string | undefined) {
+export function useMarkTaskAsComplete() {
   const { mutate } = useMutation({
-    mutationFn: (data: EditTaskRequest) => editTask(id, data),
+    mutationFn: (id: number) => markAsComplete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.tasks] });
     },

@@ -3,7 +3,7 @@ import { CreateTaskRequest } from "@/types/api/tasks/create-task-request";
 import { Formik } from "formik";
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { moderateScale } from "@/styles/metrics";
+import { moderateScale, verticalScale } from "@/styles/metrics";
 import { TASK_STATUS_ARRAY } from "@/types/constants";
 
 export default function CreateTask() {
@@ -41,14 +41,14 @@ export default function CreateTask() {
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
             <TextInput
-              style={{ height: 40, margin: 12, borderWidth: 1, padding: 10 }}
+              style={styles.titleInput}
               onChangeText={handleChange("title")}
               onBlur={handleBlur("title")}
               placeholder="title"
               value={values.title}
             />
             <TextInput
-              style={{ height: 200, margin: 12, borderWidth: 1, padding: 10 }}
+              style={styles.descriptionInput}
               onChangeText={handleChange("description")}
               onBlur={handleBlur("description")}
               placeholder="description"
@@ -56,54 +56,34 @@ export default function CreateTask() {
               multiline={true}
               numberOfLines={4}
             />
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  margin: 12,
-                }}
-              >
-                {TASK_STATUS_ARRAY.map((status) => (
-                  <Pressable
-                    key={status}
-                    onPress={() => {
-                      handleChange("status")(status);
-                    }}
-                    style={
-                      values.status === status
-                        ? styles.statusPressableChecked
-                        : styles.statusPressable
-                    }
-                  >
-                    <Ionicons
-                      name={generateIcon(status)}
-                      size={moderateScale(30)}
-                      color="black"
-                    />
-                    <Text>{status}</Text>
-                  </Pressable>
-                ))}
-              </View>
+            <View style={styles.statusContainer}>
+              {TASK_STATUS_ARRAY.map((status) => (
+                <Pressable
+                  key={status}
+                  onPress={() => {
+                    handleChange("status")(status);
+                  }}
+                  style={
+                    values.status === status
+                      ? styles.statusPressableChecked
+                      : styles.statusPressable
+                  }
+                >
+                  <Ionicons
+                    name={generateIcon(status)}
+                    size={verticalScale(30)}
+                    color="black"
+                  />
+                  <Text>{status}</Text>
+                </Pressable>
+              ))}
             </View>
 
             <Pressable
               onPress={() => handleSubmit()}
-              style={{
-                backgroundColor: "#8d49e8",
-                padding: 10,
-                margin: 12,
-                alignItems: "center",
-              }}
+              style={styles.submitButton}
             >
-              <Text
-                style={{
-                  color: "white",
-                  fontWeight: "bold",
-                }}
-              >
-                Submit
-              </Text>
+              <Text style={styles.submitText}>Submit</Text>
             </Pressable>
           </View>
         )}
@@ -113,6 +93,33 @@ export default function CreateTask() {
 }
 
 const styles = StyleSheet.create({
+  titleInput: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  descriptionInput: {
+    height: 200,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  statusContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    margin: 12,
+  },
+  submitButton: {
+    backgroundColor: "#8d49e8",
+    padding: 10,
+    margin: 12,
+    alignItems: "center",
+  },
+  submitText: {
+    color: "white",
+    fontWeight: "bold",
+  },
   statusPressable: {
     alignItems: "center",
     borderColor: "transparent",

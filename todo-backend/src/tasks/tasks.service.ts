@@ -11,7 +11,11 @@ export class TasksService {
   ) {}
 
   findAll(): Promise<Task[]> {
-    return this.tasksRepository.find();
+    return this.tasksRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   findOne(id: number): Promise<Task> {

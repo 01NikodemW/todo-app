@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { moderateScale } from "@/styles/metrics";
+import { moderateScale, verticalScale } from "@/styles/metrics";
 import { TASK_STATUS_ARRAY } from "@/types/constants";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { useTaskById } from "@/api/tasks/use-task-by-id";
@@ -54,7 +54,7 @@ export default function Task() {
         >
           <Ionicons
             name="trash-bin-outline"
-            size={moderateScale(24)}
+            size={verticalScale(24)}
             color="black"
           />
         </Pressable>
@@ -75,7 +75,7 @@ export default function Task() {
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
             <TextInput
-              style={{ height: 40, margin: 12, borderWidth: 1, padding: 10 }}
+              style={styles.titleInput}
               onChangeText={handleChange("title")}
               onBlur={handleBlur("title")}
               placeholder="title"
@@ -83,7 +83,7 @@ export default function Task() {
               editable={isEditing}
             />
             <TextInput
-              style={{ height: 200, margin: 12, borderWidth: 1, padding: 10 }}
+              style={styles.descriptionInput}
               onChangeText={handleChange("description")}
               onBlur={handleBlur("description")}
               placeholder="description"
@@ -93,13 +93,7 @@ export default function Task() {
               editable={isEditing}
             />
             <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  margin: 12,
-                }}
-              >
+              <View style={styles.statusContainer}>
                 {TASK_STATUS_ARRAY.map((status) => (
                   <Pressable
                     key={status}
@@ -116,7 +110,7 @@ export default function Task() {
                   >
                     <Ionicons
                       name={generateIcon(status)}
-                      size={moderateScale(30)}
+                      size={verticalScale(30)}
                       color="black"
                     />
                     <Text>{status}</Text>
@@ -133,14 +127,9 @@ export default function Task() {
                   setIsEditing(true);
                 }
               }}
-              style={{
-                backgroundColor: "#8d49e8",
-                padding: 10,
-                margin: 12,
-                alignItems: "center",
-              }}
+              style={styles.editButton}
             >
-              <Text style={{ color: "white", fontWeight: "bold" }}>
+              <Text style={styles.editText}>
                 {isEditing ? "Save Changes" : "Edit"}
               </Text>
             </Pressable>
@@ -152,17 +141,9 @@ export default function Task() {
                   handleChange("description")(task?.description || "");
                   handleChange("status")(task?.status || "todo");
                 }}
-                style={{
-                  borderColor: "#8d49e8",
-                  borderWidth: 2,
-                  padding: 10,
-                  margin: 12,
-                  alignItems: "center",
-                }}
+                style={styles.cancelButton}
               >
-                <Text style={{ color: "#8d49e8", fontWeight: "bold" }}>
-                  {"Cancel"}
-                </Text>
+                <Text style={styles.cancelText}>{"Cancel"}</Text>
               </Pressable>
             )}
           </View>
@@ -173,6 +154,44 @@ export default function Task() {
 }
 
 const styles = StyleSheet.create({
+  titleInput: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  descriptionInput: {
+    height: 200,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  statusContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    margin: 12,
+  },
+  editButton: {
+    backgroundColor: "#8d49e8",
+    padding: 10,
+    margin: 12,
+    alignItems: "center",
+  },
+  editText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    borderColor: "#8d49e8",
+    borderWidth: 2,
+    padding: 10,
+    margin: 12,
+    alignItems: "center",
+  },
+  cancelText: {
+    color: "#8d49e8",
+    fontWeight: "bold",
+  },
   statusPressable: {
     alignItems: "center",
     borderColor: "transparent",
