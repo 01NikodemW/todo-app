@@ -6,10 +6,13 @@ import {
   Param,
   Put,
   Delete,
+  HttpCode,
+  NotFoundException,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './task.entity';
 import { CreateTaskDto } from './create-task.dto';
+import { UpdateTaskDto } from './update-task.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('tasks')
@@ -36,7 +39,9 @@ export class TasksController {
     status: 201,
     description: 'The task has been successfully created.',
   })
+  @ApiResponse({ status: 422, description: 'Validation failed' })
   @Post()
+  @HttpCode(201)
   create(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     const task: Task = {
       ...createTaskDto,
@@ -51,9 +56,18 @@ export class TasksController {
     status: 200,
     description: 'The task has been successfully updated.',
   })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  @ApiResponse({ status: 422, description: 'Validation failed' })
   @Put(':id')
-  update(@Param('id') id: string, @Body() task: Partial<Task>): Promise<void> {
-    return this.tasksService.update(+id, task);
+  async update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ): Promise<void> {
+    const taskExists = await this.tasksService.findOne(+id);
+    if (!taskExists) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
+    return this.tasksService.update(+id, updateTaskDto);
   }
 
   @ApiOperation({ summary: 'Delete a task' })
@@ -61,8 +75,9 @@ export class TasksController {
     status: 200,
     description: 'The task has been successfully deleted.',
   })
+  @ApiResponse({ status: 404, description: 'Task not found' })
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.tasksService.remove(+id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.tasksService.remove(+id);
   }
 }

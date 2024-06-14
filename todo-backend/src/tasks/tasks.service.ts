@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './task.entity';
@@ -11,7 +11,11 @@ export class TasksService {
   ) {}
 
   findAll(): Promise<Task[]> {
-    return this.tasksRepository.find();
+    return this.tasksRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   findOne(id: number): Promise<Task> {
@@ -23,10 +27,18 @@ export class TasksService {
   }
 
   async update(id: number, task: Partial<Task>): Promise<void> {
+    const existingTask = await this.tasksRepository.findOneBy({ id });
+    if (!existingTask) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
     await this.tasksRepository.update(id, task);
   }
 
   async remove(id: number): Promise<void> {
+    const existingTask = await this.tasksRepository.findOneBy({ id });
+    if (!existingTask) {
+      throw new NotFoundException(`Task with ID ${id} not found`);
+    }
     await this.tasksRepository.delete(id);
   }
 }
