@@ -94,16 +94,16 @@ export default function CreateTask() {
 
 const styles = StyleSheet.create({
   titleInput: {
-    height: 40,
-    margin: 12,
+    height: verticalScale(40),
+    margin: verticalScale(12),
     borderWidth: 1,
-    padding: 10,
+    padding: verticalScale(10),
   },
   descriptionInput: {
-    height: 200,
-    margin: 12,
+    height: verticalScale(200),
+    margin: verticalScale(12),
     borderWidth: 1,
-    padding: 10,
+    padding: verticalScale(10),
   },
   statusContainer: {
     flexDirection: "row",
